@@ -9,7 +9,7 @@ export default function Home() {
   const [transport, setTransport] = useState("N/A");
 
   const [message, setMessage] = useState("");
-  const [allmessages, setAllmessages] = useState<string[]>([]);
+  const [allmessages, setAllmessages] = useState<string[]>(["Welcome"]);
 
   useEffect(() => {
     if (socket.connected) {
@@ -33,9 +33,12 @@ export default function Home() {
     }
 
     socket.on("connect", onConnect);
+
     socket.on('message', (message) => {
+      console.log('message: ', message);
       setAllmessages((prevMessages: string[]) => [...prevMessages, message]);
     });
+    
     socket.on("disconnect", onDisconnect);
 
     return () => {
