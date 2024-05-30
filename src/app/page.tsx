@@ -9,7 +9,7 @@ export default function Home() {
   const [transport, setTransport] = useState("N/A");
 
   const [message, setMessage] = useState("");
-  const [allmessages, setAllmessages] = useState<string[]>(["Welcome"]);
+  const [allmessages, setAllmessages] = useState(new Set([""]));
 
   useEffect(() => {
     if (socket.connected) {
@@ -36,9 +36,9 @@ export default function Home() {
 
     socket.on('message', (message) => {
       console.log('message: ', message);
-      setAllmessages((prevMessages: string[]) => [...prevMessages, message]);
+      setAllmessages((prevMessages: any) => new Set([...prevMessages, message]));
     });
-    
+
     socket.on("disconnect", onDisconnect);
 
     return () => {
@@ -62,7 +62,7 @@ export default function Home() {
       <TextField value={message} onChange={(e) => setMessage(e.target.value)} ></TextField>
       <Button variant="contained" sx={{ width: '60px' }} onClick={handleSubmit}>Send</Button>
       <Stack>
-        {allmessages.map((message, index) => (
+        {Array.from(allmessages).map((message, index) => (
           <p key={index}>{message}</p>
         ))}
       </Stack>
